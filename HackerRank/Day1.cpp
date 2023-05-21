@@ -9,7 +9,7 @@ int main()
     int i = 4;
     double d = 4;
     string s = "HackerRank ";
-    // Declare second integer, double, and String variables.
+    // Declare second integer, double, and String variables
     int a;
     double b;
     string c;
