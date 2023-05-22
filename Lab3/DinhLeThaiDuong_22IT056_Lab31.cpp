@@ -1,15 +1,81 @@
-#include <iostream>
-#include <stack>
-#include <string>
-#include <cmath>
+#include <bits/stdc++.h>
 using namespace std;
-//----------------------------------------------------------------
-// Hàm trả về độ ưu tiên của toán tử
+
+const int MAX_SIZE = 100;
+struct ST
+{
+    int data;
+    ST *next;
+};
+ST *top;
+void push(int value)
+{
+    ST *newNode = new ST();
+    if (!newNode)
+    {
+        cout << "Heap overflow" << endl;
+        exit(1);
+    }
+    newNode->data = value;
+    newNode->next = top;
+    top = newNode;
+}
+bool isEmpty()
+{
+    return top == nullptr;
+}
+
+int topp()
+{
+    if (!isEmpty())
+    {
+        return top->data;
+    }
+    else
+    {
+        cout << "Stack is empty" << endl;
+        exit(1);
+    }
+}
+void pop()
+{
+    if (isEmpty())
+    {
+        cout << "Stack Underflow" << endl;
+        exit(1);
+    }
+    else
+    {
+        ST *temp = top;
+        top = top->next;
+        temp->next = nullptr;
+        delete temp;
+    }
+}
+
+void display()
+{
+    if (isEmpty())
+    {
+        cout << "Stack is empty" << endl;
+        return;
+    }
+    else
+    {
+        ST *temp = top;
+        while (temp != nullptr)
+        {
+            cout << temp->data << " ";
+            temp = temp->next;
+        }
+        cout << endl;
+    }
+}
+//============================================================================
 bool isOperator(char ch)
 {
     return ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '^';
 }
-//----------------------------------------------------------------
 int precedence(char op)
 {
     if (op == '+' || op == '-')
@@ -25,12 +91,10 @@ int precedence(char op)
         return 0;
     }
 }
-//----------------------------------------------------------------
-// Hàm chuyển đổi biểu thức trung tố sang biểu thức hậu tố
 string infixToPostfix(string infix)
 {
-    stack<char> operatorStack; // Ngăn xếp để chứa các toán tử
-    string postfix = "";       // Chuỗi đầu ra chứa biểu thức hậu tố
+
+    string postfix = ""; // Chuỗi đầu ra chứa biểu thức hậu tố
 
     // Duyệt từng ký tự trong biểu thức trung tố
     for (char c : infix)
@@ -47,48 +111,46 @@ string infixToPostfix(string infix)
         else if (c == '(')
         {
             // Nếu ký tự là dấu ngoặc trái, đẩy vào ngăn xếp
-            operatorStack.push(c);
+            push(c);
         }
         else if (c == ')')
         {
             // Nếu ký tự là dấu ngoặc phải, lấy ra toán tử từ ngăn xếp và thêm vào chuỗi đầu ra cho đến khi gặp dấu ngoặc trái
-            while (!operatorStack.empty() && operatorStack.top() != '(')
+            while (!isEmpty() && topp() != '(')
             {
-                postfix += operatorStack.top();
-                operatorStack.pop();
+                postfix += topp();
+                pop();
             }
             // Bỏ qua dấu ngoặc trái
-            if (!operatorStack.empty() && operatorStack.top() == '(')
+            if (!isEmpty() && topp() == '(')
             {
-                operatorStack.pop();
+                pop();
             }
         }
         else
         {
             // Nếu ký tự là toán tử, lấy ra các toán tử trong ngăn xếp có độ ưu tiên cao hơn hoặc bằng toán tử hiện tại và thêm vào chuỗi đầu ra
-            while (!operatorStack.empty() && precedence(operatorStack.top()) >= precedence(c))
+            while (!isEmpty() && precedence(topp()) >= precedence(c))
             {
-                postfix += operatorStack.top();
-                operatorStack.pop();
+                postfix += topp();
+                pop();
             }
             // Đẩy toán tử hiện tại vào ngăn xếp
-            operatorStack.push(c);
+            push(c);
         }
     }
 
     // Lấy ra các toán tử còn lại trong ngăn xếp và thêm vào chuỗi đầu ra
-    while (!operatorStack.empty())
+    while (!isEmpty())
     {
-        postfix += operatorStack.top();
-        operatorStack.pop();
+        postfix += topp();
+        pop();
     }
 
     return postfix;
 }
-//----------------------------------------------------------------
 double evaluatePostfix(string postfix)
 {
-    stack<double> s;
 
     for (int i = 0; i < postfix.length(); i++)
     {
@@ -102,7 +164,7 @@ double evaluatePostfix(string postfix)
             while (isdigit(postfix[i]))
             {
                 num = num * 10 + postfix[i] - '0';
-                s.push(num);
+                push(num);
                 num = 0;
                 i++;
             }
@@ -110,26 +172,26 @@ double evaluatePostfix(string postfix)
         }
         else if (isOperator(postfix[i]))
         {
-            double op2 = s.top();
-            s.pop();
-            double op1 = s.top();
-            s.pop();
+            double op2 = topp();
+            pop();
+            double op1 = topp();
+            pop();
             switch (postfix[i])
             {
             case '+':
-                s.push(op1 + op2);
+                push(op1 + op2);
                 break;
             case '-':
-                s.push(op1 - op2);
+                push(op1 - op2);
                 break;
             case '*':
-                s.push(op1 * op2);
+                push(op1 * op2);
                 break;
             case '/':
-                s.push(op1 / op2);
+                push(op1 / op2);
                 break;
             case '^':
-                s.push(pow(op1, op2));
+                push(pow(op1, op2));
                 break;
             }
         }
@@ -138,9 +200,8 @@ double evaluatePostfix(string postfix)
             return NAN;
         }
     }
-    return s.top();
+    return topp();
 }
-//----------------------------------------------------------------
 int main()
 {
     string infix, postfix;
