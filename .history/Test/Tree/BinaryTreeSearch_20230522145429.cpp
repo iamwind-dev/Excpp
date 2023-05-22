@@ -111,26 +111,18 @@ void LNR(tree root)
 int main()
 {
     tree root;
-    int a;
-    int x;
     khoi_tao_cay(root);
     nhap_cay(root);
 
-    cout << "Preorder traversal of the tree is: ";
+    cout << "\nPreorder traversal of the tree is: ";
     LNR(root);
     cout << endl;
-    cout << "Nhap so can tim: ";
-    cin >> a;
-
-    if (tim(a, root))
-        cout << "\ntim thay ";
+    if (tim(90, root))
+        cout << "tim thay ";
     else
-        cout << "\nkhong tim thay";
+        cout << "khong tim thay";
     cout << endl;
-    cout << "Nhap so can xoa: ";
-    cin >> x;
-    xoa(x, root);
-    cout << endl;
+    xoa(20, root);
     LNR(root);
     system("pause");
     return 0;

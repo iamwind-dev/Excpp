@@ -128,7 +128,6 @@ int main()
         cout << "\nkhong tim thay";
     cout << endl;
     cout << "Nhap so can xoa: ";
-    cin >> x;
     xoa(x, root);
     cout << endl;
     LNR(root);

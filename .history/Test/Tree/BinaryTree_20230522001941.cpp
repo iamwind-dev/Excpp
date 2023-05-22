@@ -53,7 +53,6 @@ void PreOrder(TTree *T)
         PreOrder(p->right);
     }
 }
-
 //==================================================================================================
 int main()
 {
@@ -98,6 +97,6 @@ int main()
     cout << "\nDuyet hau to: ";
     PostOrder(T);
     cout << endl;
-    system("pause");
+
     return 0;
 }
