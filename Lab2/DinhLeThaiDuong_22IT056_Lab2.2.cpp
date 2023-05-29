@@ -23,20 +23,34 @@ void print_poly(struct node *poly)
     {
         if (poly->num == 0) // neu he so = 0 thi bo qa
         {
-            cout << poly->coeff;
+            poly = poly->next;
+            continue;
         }
 
         else if (poly->num == 1) // neu he so == 1
         {
-            cout << poly->coeff << "x";
+            if (poly->coeff == 0)
+                cout << "1";
+            else if (poly->coeff == 1)
+                cout << "x";
+            else
+                cout << "x^" << poly->coeff;
         }
         else // neu he so != 1
         {
-            cout << poly->coeff << "x^" << poly->num;
+            if (poly->coeff == 0)
+            {
+                poly->num = 1;
+                cout << "1";
+            }
+            else
+            {
+                cout << poly->num << "x^" << poly->coeff;
+            }
         }
 
         poly = poly->next;
-        if (poly != NULL) // neu chua phai node cuoi cung thi in ra
+        if (poly != NULL && poly->num > 0) // neu chua phai node cuoi cung thi in ra
         {
             cout << " + ";
         }
@@ -60,7 +74,7 @@ struct node *input_poly()
     {
         int num, coeff;
         cout << "Enter the coefficient and exponent of term " << i << ": ";
-        cin >> coeff >> num;
+        cin >> num >> coeff;
         // Tao 1 nut moi va gan gia tri cho no
         struct node *new_term = new node;
         new_term->num = num;
@@ -93,14 +107,14 @@ struct node *add_poly(struct node *poly1, struct node *poly2)
     {
         struct node *new_term = new node; // tao 1 moi
 
-        if (poly1->num == poly2->num) // neu so mu == nhau thi cong he so
+        if (poly1->coeff == poly2->coeff) // neu so mu == nhau thi cong he so
         {
-            new_term->coeff = poly1->coeff + poly2->coeff; // cong he so
-            new_term->num = poly1->num;                    // gan so mu
-            poly1 = poly1->next;                           // chuyen node tiep theo cua da thuc 1
-            poly2 = poly2->next;                           // chueyn node tiep theo cua da thuc 2
+            new_term->num = poly1->num + poly2->num; // cong he so
+            new_term->coeff = poly1->coeff;          // gan so mu
+            poly1 = poly1->next;                     // chuyen node tiep theo cua da thuc 1
+            poly2 = poly2->next;                     // chueyn node tiep theo cua da thuc 2
         }
-        else if (poly1->num > poly2->num) // neu so mu cua da thuc 1 > so mu cau da thuc 2
+        else if (poly1->coeff > poly2->coeff) // neu so mu cua da thuc 1 > so mu cau da thuc 2
         {
             new_term->coeff = poly1->coeff; // gan so mu cua da thuc 1 vao node cua da thuc moi
             new_term->num = poly1->num;     // gan he so cua da thuc 1 vao da thuc moi
@@ -174,21 +188,21 @@ struct node *subtract_poly(struct node *poly1, struct node *poly2)
     struct node *result = NULL;
     while (poly1 != NULL && poly2 != NULL)
     {
-        if (poly1->num == poly2->num) // neu so mu == nhau thi tru he so
+        if (poly1->coeff == poly2->coeff) // neu so mu == nhau thi tru he so
         {
-            int coef = poly1->coeff - poly2->coeff;
-            if (coef != 0)
+            int num = poly1->num - poly2->num;
+            if (num != 0)
             {
                 struct node *newnode = new node;
-                newnode->num = poly1->num;
-                newnode->coeff = coef;
+                newnode->coeff = poly1->coeff;
+                newnode->num = num;
                 newnode->next = result;
                 result = newnode;
             }
             poly1 = poly1->next;
             poly2 = poly2->next;
         }
-        else if (poly1->num > poly2->num) // neu so mu da thuc 1 > da thuc 2
+        else if (poly1->coeff > poly2->coeff) // neu so mu da thuc 1 > da thuc 2
         {
             struct node *newnode = new node;
             newnode->num = poly1->num;
@@ -202,8 +216,8 @@ struct node *subtract_poly(struct node *poly1, struct node *poly2)
         {
 
             struct node *newnode = new node;
-            newnode->num = poly2->num;
-            newnode->coeff = -poly2->coeff; // doi dau he so da thuc 2 them vao ds kq
+            newnode->coeff = poly2->coeff;
+            newnode->num = -poly2->num; // doi dau he so da thuc 2 them vao ds kq
             newnode->next = result;
             result = newnode;
 
@@ -269,6 +283,13 @@ int main()
     struct node *diff = subtract_poly(poly1, poly2);
     cout << "The difference of the two polynomials is:" << endl;
     print_poly(diff);
+    float x, result;
+    cout << "Nhap x= ";
+    cin >> x;
+    result = calculate_poly(poly1, x);
+    cout << "f1(" << x << ") = " << result << endl;
+    result = calculate_poly(poly2, x);
+    cout << "f2(" << x << ") = " << result << endl;
     delete (poly1);
     delete (poly2);
     system("pause");

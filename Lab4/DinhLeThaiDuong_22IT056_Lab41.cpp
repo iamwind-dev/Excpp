@@ -75,7 +75,7 @@ void InsertionSort(int array[], int n)
         key = array[i];
         j = i - 1;
 
-        while (j >= 0 && array[j] < key)
+        while (j >= 0 && array[j] > key)
         {
             array[j + 1] = array[j];
             j = j - 1;
@@ -187,7 +187,7 @@ int main()
     fillarray(array, ARRAY_SIZE);
     cout << "Array: " << endl;
     printarray(array, ARRAY_SIZE);
-    SelectionSort(array, ARRAY_SIZE);
+    InsertionSort(array, ARRAY_SIZE);
     cout << "Sap xep chen: " << endl;
     printarray(array, ARRAY_SIZE);
     cout << endl;

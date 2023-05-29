@@ -126,9 +126,72 @@ void postorderTraversal(Node *root)
     }
 }
 
+bool isOperand(char c)
+{
+    return isalpha(c) || isdigit(c);
+}
+
+int getPrecedence(char c)
+{
+    if (c == '+' || c == '-')
+        return 1;
+    else if (c == '*' || c == '/')
+        return 2;
+    return 0;
+}
+
+string infixToPostfix(const string &infix)
+{
+    string postfix;
+    char operatorStack[100];
+    int top = -1;
+
+    for (char c : infix)
+    {
+        if (isOperand(c))
+        {
+            postfix += c;
+        }
+        else if (isOperator(c))
+        {
+            while (top != -1 && operatorStack[top] != '(' &&
+                   getPrecedence(c) <= getPrecedence(operatorStack[top]))
+            {
+                postfix += operatorStack[top];
+                top--;
+            }
+            top++;
+            operatorStack[top] = c;
+        }
+        else if (c == '(')
+        {
+            top++;
+            operatorStack[top] = c;
+        }
+        else if (c == ')')
+        {
+            while (top != -1 && operatorStack[top] != '(')
+            {
+                postfix += operatorStack[top];
+                top--;
+            }
+            top--; // Pop '('
+        }
+    }
+
+    while (top != -1)
+    {
+        postfix += operatorStack[top];
+        top--;
+    }
+
+    return postfix;
+}
+
 int main()
 {
-    string postfix = "85-42+3/*";
+    string infix = "((8-5)*((4+2)/3))";
+    string postfix = infixToPostfix(infix);
     Node *root = constructExpressionTree(postfix);
 
     cout << "Inorder traversal of the expression tree: ";
