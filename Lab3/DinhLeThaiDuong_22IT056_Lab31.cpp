@@ -205,10 +205,10 @@ double evaluatePostfix(string postfix)
 int main()
 {
     string infix, postfix;
-    cout << "Enter an infix expression: ";
+    cout << "Nhập biểu thức trung tố: ";
     getline(cin, infix);
     postfix = infixToPostfix(infix);
-    cout << "Postfix: " << postfix << endl;
+    cout << "Biểu thức hậu tố: " << postfix << endl;
     double result = evaluatePostfix(postfix);
     if (isnan(result))
     {
@@ -216,7 +216,7 @@ int main()
     }
     else
     {
-        cout << "Result: " << result << endl;
+        cout << "Kết quả: " << result << endl;
     }
     system("pause");
     return 0;

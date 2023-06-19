@@ -43,6 +43,10 @@ void print_poly(struct node *poly)
                 poly->num = 1;
                 cout << "1";
             }
+            else if (poly->coeff == 1)
+            {
+                cout << poly->num << "x";
+            }
             else
             {
                 cout << poly->num << "x^" << poly->coeff;
@@ -57,8 +61,6 @@ void print_poly(struct node *poly)
     }
     cout << endl;
 }
-
-//
 struct node *input_poly()
 {
     // Khoi tao con tro dau danh sach va con tro cuoi danh sach == NULL
@@ -67,13 +69,13 @@ struct node *input_poly()
     // Nhap so luong cac hang tu trong da thuc
     int n;
 
-    cout << "Enter the number of terms in the polynomial: ";
+    cout << "Nhập số lượng hạng tử trong đa thức: ";
     cin >> n;
     // Lap qua tung hang tu v� nhap he so v� so mu cua no tu ban phim
     for (int i = 1; i <= n; i++)
     {
         int num, coeff;
-        cout << "Enter the coefficient and exponent of term " << i << ": ";
+        cout << "Nhập hệ số và số mũ của hạng tử " << i << ": ";
         cin >> num >> coeff;
         // Tao 1 nut moi va gan gia tri cho no
         struct node *new_term = new node;
@@ -263,28 +265,28 @@ int main()
     struct node *poly1 = NULL;
     struct node *poly2 = NULL;
     // Nhap da thuc 1
-    cout << "Enter the first polynomial:" << endl;
+    cout << "Nhập đa thức 1:" << endl;
     poly1 = input_poly();
-    cout << "The first polynomial is:" << endl;
-    print_poly(poly1);
 
     // Nhap da thuc 2
-    cout << "Enter the second polynomial:" << endl;
+    cout << "Nhập đa thức 2:" << endl;
     poly2 = input_poly();
-    cout << "The second polynomial is:" << endl;
+    cout << "f1(x)= ";
+    print_poly(poly1);
+    cout << "f2(x)= ";
     print_poly(poly2);
 
     // Phep cong 2 da thuc
     struct node *sum = add_poly(poly1, poly2);
-    cout << "The sum of the two polynomials is:" << endl;
+    cout << "Tổng 2 đa thức:" << endl;
     print_poly(sum);
 
     // Phep tru 2 da thuc
     struct node *diff = subtract_poly(poly1, poly2);
-    cout << "The difference of the two polynomials is:" << endl;
+    cout << "Hiệu 2 đa thức:" << endl;
     print_poly(diff);
     float x, result;
-    cout << "Nhap x= ";
+    cout << "Nhập x= ";
     cin >> x;
     result = calculate_poly(poly1, x);
     cout << "f1(" << x << ") = " << result << endl;

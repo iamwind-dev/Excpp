@@ -1,6 +1,6 @@
 #include <iostream>
 using namespace std;
-// Function to swap two elements
+// 
 void swap(int &a, int &b)
 {
     int temp = a;
@@ -8,7 +8,7 @@ void swap(int &a, int &b)
     b = temp;
 }
 
-// Function to maintain the max heap property
+// 
 void heapify(int arr[], int n, int i)
 {
     int largest = i;
@@ -32,7 +32,7 @@ void heapify(int arr[], int n, int i)
     }
 }
 
-// Function to build a max heap from an array
+// 
 void buildMaxHeap(int arr[], int n)
 {
     for (int i = n / 2 - 1; i >= 0; i--)
@@ -41,7 +41,7 @@ void buildMaxHeap(int arr[], int n)
     }
 }
 
-// Function to insert a new element into the max heap
+// 
 void insertElement(int arr[], int &n, int key)
 {
     n++;
@@ -55,7 +55,7 @@ void insertElement(int arr[], int &n, int key)
     }
 }
 
-// Function to delete an element from the max heap
+// 
 void deleteElement(int arr[], int &n, int key)
 {
     int i;
@@ -78,7 +78,7 @@ void deleteElement(int arr[], int &n, int key)
     heapify(arr, n, i);
 }
 
-// Function to sort the numbers in descending order using heap sort
+// 
 void heapSort(int arr[], int n)
 {
     buildMaxHeap(arr, n);
@@ -90,7 +90,7 @@ void heapSort(int arr[], int n)
     }
 }
 
-// Function to display the elements of the heap
+// 
 void displayHeap(int arr[], int n)
 {
     std::cout << "Heap: ";

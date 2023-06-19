@@ -104,16 +104,16 @@ bool checkParentheses(string expression)
 int main()
 {
     string expression;
-    cout << "Nhap bieu thuc: ";
+    cout << "Nhập biểu thức: ";
     cin >> expression;
 
     if (checkParentheses(expression))
     {
-        cout << "Hop le!" << endl;
+        cout << "Hợp lệ!" << endl;
     }
     else
     {
-        cout << "Khong hop le!" << endl;
+        cout << "Không hợp lệ!" << endl;
     }
     system("pause");
     return 0;

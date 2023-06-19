@@ -1,157 +1,154 @@
 #include <iostream>
-#include <queue>
-#include <stack>
-
-// Function to create a graph using adjacency matrix
-void createGraph(int **&matrix, int n)
+#include <iomanip>
+#include <fstream>
+using namespace std;
+//----------------------------------------------------------------Khai báo cấu trúc dữ liệu
+int A[20][20];
+int n, top = 0, R = 0, F = 0;
+int X[20], S[20], Q[20];
+//----------------------------------------------------------------Viết hàm nhập xuất đồ thị
+void INP(int M[20][20], int &n)
 {
-    matrix = new int *[n];
-    for (int i = 0; i < n; i++)
+    for (int d = 1; d <= n; d++)
     {
-        matrix[i] = new int[n];
-        for (int j = 0; j < n; j++)
+        for (int c = 1; c <= n; c++)
         {
-            matrix[i][j] = 0;
+            cout << "A[" << d << "," << c << "]=";
+            cin >> M[d][c];
         }
     }
 }
-
-// Function to add an edge between two vertices
-void addEdge(int **matrix, int u, int v)
+//----------------------------------------------------------------Viết hàm xuất đồ thị
+void OUT(int M[20][20], int &n)
 {
-    matrix[u][v] = 1;
-    matrix[v][u] = 1;
+    cout << " ";
+    for (int i = 1; i <= n; i++)
+    {
+        cout << setw(4) << i;
+    }
+    cout << endl;
+    for (int d = 1; d <= n; d++)
+    {
+        cout << d;
+        for (int c = 1; c <= n; c++)
+        {
+            cout << setw(4) << M[d][c];
+        }
+        cout << endl;
+    }
+}
+//----------------------------------------------------------------Viết hàm đánh dấu
+void DD(int X[20], int n)
+{
+    for (int i = 1; i <= n; i++)
+    {
+        X[i] = 1;
+    }
+}
+//----------------------------------------------------------------
+void Push(int S[20], int &dinh, int k)
+{
+    if (dinh < 19)
+    {
+        dinh++;
+        S[dinh] = k;
+    }
+}
+//----------------------------------------------------------------
+void Pop(int S[20], int &dinh)
+{
+    int k = -1; // Đặt giá trị mặc định cho k
+    if (dinh > 0)
+    {
+        k = S[dinh];
+        dinh--;
+    }
+    if (k != -1)
+        cout << setw(4) << k;
 }
 
-// Function to perform breadth-first search (BFS) traversal
-void BFS(int **matrix, int n, int startVertex)
+//----------------------------------------------------------------Viết hàm duyệt sâu
+void DS(int M[20][20], int n)
 {
-    bool *visited = new bool[n];
-    for (int i = 0; i < n; i++)
+    cout << "1" << setw(4);
+    X[1] = 0;
+    for (int i = 1; i <= n; i++)
     {
-        visited[i] = false;
-    }
-
-    std::queue<int> queue;
-    visited[startVertex] = true;
-    std::cout << "BFS traversal starting from vertex " << startVertex << ": ";
-
-    queue.push(startVertex);
-    while (!queue.empty())
-    {
-        int currentVertex = queue.front();
-        std::cout << currentVertex << " ";
-        queue.pop();
-
-        for (int i = 0; i < n; i++)
-        {
-            if (matrix[currentVertex][i] == 1 && !visited[i])
+        for (int j = n; j >= 1; j--)
+            if ((M[i][j] == 1) && (X[j] == 1))
             {
-                visited[i] = true;
-                queue.push(i);
+                Push(S, top, j);
+                X[j] = 0;
             }
-        }
+        Pop(S, top);
     }
-
-    delete[] visited;
-    std::cout << std::endl;
 }
-
-// Function to perform depth-first search (DFS) traversal
-void DFS(int **matrix, int n, int startVertex)
+//----------------------------------------------------------------
+void AddQ(int Q[20], int &R, int &F, int k)
 {
-    bool *visited = new bool[n];
-    for (int i = 0; i < n; i++)
+    if (R == 0 && F == 0)
     {
-        visited[i] = false;
+        R = F = 1;
+        Q[R] = Q[F] = k;
     }
-
-    std::stack<int> stack;
-    visited[startVertex] = true;
-    std::cout << "DFS traversal starting from vertex " << startVertex << ": ";
-
-    stack.push(startVertex);
-    while (!stack.empty())
+    else
     {
-        int currentVertex = stack.top();
-        std::cout << currentVertex << " ";
-        stack.pop();
-
-        for (int i = 0; i < n; i++)
+        R++;
+        Q[R] = k;
+    }
+}
+//----------------------------------------------------------------
+void DeleteQ(int Q[20], int &R, int &F)
+{
+    int k;
+    if (F <= R)
+    {
+        k = Q[F];
+        F++;
+        if (k != 0)
         {
-            if (matrix[currentVertex][i] == 1 && !visited[i])
-            {
-                visited[i] = true;
-                stack.push(i);
-            }
+            cout << setw(4) << k;
+        }
+        if (F > R)
+        {
+            F = R = 0;
         }
     }
-
-    delete[] visited;
-    std::cout << std::endl;
 }
 
+//----------------------------------------------------------------Viết hàm duyệt rộng
+void DR(int M[20][20], int n)
+{
+    cout << "1" << setw(4);
+    X[1] = 0;
+    for (int i = 1; i <= n; i++)
+    {
+        for (int j = 1; j <= n; j++)
+            if ((M[i][j] == 1) && (X[j] == 1))
+            {
+                AddQ(Q, R, F, j);
+                X[j] = 0;
+            }
+        DeleteQ(Q, R, F);
+    }
+}
+//================================================================
 int main()
 {
-    int n;
-    std::cout << "Enter the number of vertices in the graph: ";
-    std::cin >> n;
+    cout << "Số đỉnh= ";
+    cin >> n;
+    INP(A, n);
+    cout << "\n Đô thị vừa nhập:\n";
+    OUT(A, n);
+    DD(X, n);
+    cout << "\n Duyệt sâu:\n";
+    DS(A, n);
+    cout << "\n";
+    DD(X, n);
+    cout << "\n Duyệt rộng:\n";
+    DR(A, n);
+    cout << "\n";
 
-    int **matrix;
-    createGraph(matrix, n);
-
-    int choice;
-    do
-    {
-        std::cout << "Menu:\n";
-        std::cout << "1. Add an edge\n";
-        std::cout << "2. Perform BFS traversal\n";
-        std::cout << "3. Perform DFS traversal\n";
-        std::cout << "4. Exit\n";
-        std::cout << "Enter your choice: ";
-        std::cin >> choice;
-
-        switch (choice)
-        {
-        case 1:
-        {
-            int u, v;
-            std::cout << "Enter the vertices (u and v) to add an edge: ";
-            std::cin >> u >> v;
-            addEdge(matrix, u, v);
-            break;
-        }
-        case 2:
-        {
-            int startVertex;
-            std::cout << "Enter the starting vertex for BFS traversal: ";
-            std::cin >> startVertex;
-            BFS(matrix, n, startVertex);
-            break;
-        }
-        case 3:
-        {
-            int startVertex;
-            std::cout << "Enter the starting vertex for DFS traversal: ";
-            std::cin >> startVertex;
-            DFS(matrix, n, startVertex);
-            break;
-        }
-        case 4:
-            std::cout << "Exiting...\n";
-            break;
-        default:
-            std::cout << "Invalid choice. Please try again.\n";
-            break;
-        }
-    } while (choice != 4);
-
-    // Deallocate memory
-    for (int i = 0; i < n; i++)
-    {
-        delete[] matrix[i];
-    }
-    delete[] matrix;
-
+    system("pause");
     return 0;
 }

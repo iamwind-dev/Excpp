@@ -1,5 +1,5 @@
 #include <iostream>
-
+using namespace std;
 class Node
 {
 public:
@@ -86,7 +86,7 @@ int main()
 {
     int n = 7;
     int k = 3;
-    std::cout << "The safe position is " << josephus(n, k) << std::endl;
+    cout << "Vị trí an toàn là " << josephus(n, k) << endl;
     system("pause");
     return 0;
 }
